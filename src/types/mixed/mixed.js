@@ -259,7 +259,9 @@ class YupMixed extends Base {
 
     this.onConstraintAdded({ name: constraintName, value: values });
 
-    const newBase = constraintFn(...values, errFn);
+    if (!values || values.length === 0) return yup;
+
+    const newBase = constraintFn(values, errFn);
     return newBase;
   }
 
