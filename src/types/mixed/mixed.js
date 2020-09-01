@@ -56,12 +56,12 @@ class YupMixed extends Base {
 
   disabledMode(modeName) {
     const modeEntry = this.mode[modeName];
-    return !!this.disableFlags.find(disable => modeEntry === disable);
+    return !!this.disableFlags.find((disable) => modeEntry === disable);
   }
 
   enabledMode(modeName) {
     const modeEntry = this.mode[modeName];
-    return !!this.enableFlags.find(disable => modeEntry === disable);
+    return !!this.enableFlags.find((disable) => modeEntry === disable);
   }
 
   get shouldPreProcessValue() {
@@ -74,7 +74,7 @@ class YupMixed extends Base {
     if (!this.isRequired(value)) {
       return {
         ...value,
-        notRequired: true
+        notRequired: true,
       };
     }
     return value;
@@ -93,7 +93,7 @@ class YupMixed extends Base {
   }
 
   rebind(...methods) {
-    methods.map(name => {
+    methods.map((name) => {
       const method = this[name];
       this[name] = this.isFunctionType(method) ? method.bind(this) : method;
     });
@@ -114,7 +114,7 @@ class YupMixed extends Base {
   }
 
   convertEnabled() {
-    this.enabled.map(name => {
+    this.enabled.map((name) => {
       if (this[name]) {
         this[name]();
       }
@@ -141,7 +141,7 @@ class YupMixed extends Base {
     return this.constraintBuilder.addConstraint(propName, {
       constraintName,
       value: true,
-      errName
+      errName,
     });
   }
 
@@ -149,7 +149,7 @@ class YupMixed extends Base {
     return {
       oneOf: "oneOf",
       enum: "oneOf",
-      anyOf: "oneOf"
+      anyOf: "oneOf",
       // ...
     };
   }
@@ -162,7 +162,7 @@ class YupMixed extends Base {
       method,
       yup,
       values,
-      errName
+      errName,
     } = opts;
     yup = yup || this.base;
     constraintValue =
@@ -196,7 +196,7 @@ class YupMixed extends Base {
       constraintName,
       yup,
       constraintFn,
-      errFn
+      errFn,
     };
 
     const newBase =
@@ -288,11 +288,11 @@ class YupMixed extends Base {
     // contains different types of constraints (ie. name -> yup constraint function calls)
     const $map = this.constraintsMap;
     const keys = Object.keys($map);
-    keys.map(key => {
+    keys.map((key) => {
       const constraintNames = $map[key];
       const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
       const fn = this[fnName];
-      constraintNames.map(constraintName => {
+      constraintNames.map((constraintName) => {
         fn(constraintName);
       });
     });
@@ -302,7 +302,7 @@ class YupMixed extends Base {
   get constraintsMap() {
     return {
       simple: ["required", "notRequired", "nullable"],
-      value: ["default", "strict"]
+      value: ["default", "strict"],
     };
   }
 
@@ -312,7 +312,7 @@ class YupMixed extends Base {
     if (this.isNothing(values)) return this;
     values = Array.isArray(values) ? values : [values];
     // using alias
-    const alias = ["oneOf", "enum", "anyOf"].find(key => {
+    const alias = ["oneOf", "enum", "anyOf"].find((key) => {
       return this.constraints[key];
     });
     // TODO: pass value as constraintValue not value
@@ -330,6 +330,10 @@ class YupMixed extends Base {
   }
 
   valErrMessage(constraint) {
+    if (this.errMessages[`$${constraint}`]) {
+      return this.errMessages[`$${constraint}`](this.constraints);
+    }
+
     const errMsg = this.errMessages[this.key]
       ? this.errMessages[this.key][constraint]
       : undefined;
@@ -344,7 +348,7 @@ class YupMixed extends Base {
       schema: this.schema,
       properties: this.properties,
       config: this.config,
-      when
+      when,
     };
 
     const $createWhenCondition =
