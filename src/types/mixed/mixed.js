@@ -261,7 +261,11 @@ class YupMixed extends Base {
 
     if (!values || values.length === 0) return yup;
 
-    const newBase = constraintFn(values, errFn);
+    const newBase =
+      constraintName === "when"
+        ? constraintFn(...values, errFn)
+        : constraintFn(values, errFn);
+
     return newBase;
   }
 
