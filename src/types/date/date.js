@@ -4,7 +4,9 @@ export class YupDate extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "date";
-    this.base = this.yup.date();
+    this.base = this.yup
+      .date()
+      .typeError(this.valErrMessage("typeError") || "Invalid date");
   }
 
   static create(obj) {
